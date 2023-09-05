@@ -8,9 +8,10 @@ After car run, driver's informations will show on the screen.
 <br><br><br>
 
 
-<img width="417" alt="Screen Shot 2023-09-04 at 16 01 43" src="https://github.com/aliemre2023/driver-control/assets/93014021/47f8d6db-1735-4cea-ad56-7896318a62a9">
+
+<img width="417" alt="Screen Shot 2023-09-04 at 16 01 43" src="https://github.com/aliemre2023/driver-control/assets/93014021/dc0fbf15-049c-439f-802a-ffc9a402e76d">
 <br>
-<img width="298" alt="Screen Shot 2023-09-04 at 16 06 16" src="https://github.com/aliemre2023/driver-control/assets/93014021/925d62b4-a03a-4f51-bfe8-2b63754e1d1f">
+<img width="417" alt="Screen Shot 2023-09-04 at 16 06 16" src="https://github.com/aliemre2023/driver-control/assets/93014021/12aba4dc-be6f-4016-ac11-7e5cb1957ca6">
 <br><br><br>
 
 <img width="417" alt="Screen Shot 2023-09-04 at 16 01 43" src="https://github.com/aliemre2023/driver-control/assets/93014021/b740d24c-397d-47fa-93d2-839ba16f20ba">
