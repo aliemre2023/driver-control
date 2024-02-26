@@ -1,7 +1,7 @@
 # driver-control
 
 In this project I use OpenCV for recognize the driver.<br>
-If driver is alreay be registered in the car, car can able to run, otherwise can't.<br>
+If driver is already be registered in the car, car can able to run, otherwise can't.<br>
 After car run, driver's informations will show on the screen.
 
 
