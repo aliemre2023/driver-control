@@ -1,14 +1,19 @@
+import os
 import cv2  as cv
 import datetime
 import time
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
 from PySide6.QtGui import QPixmap, QIcon, QPalette, QColor
+from PySide6.QtCore import QTimer
+from nbconvert import PythonExporter
+from nbformat import read
 
 # Title for datas
 titles = ["Name", "Blood", "Experience(km)", "Accident"]
 # People who allowed to drive the car and datas
-people = [["Ali Emre Kaya", "0+", 134, 0]]
+people = [["Ali Emre Kaya", "0+", 134, 0],
+          ["Burhan Altintop", "A+", 0, 3]]
 
 # Load a trained face recognizer model
 face_recognizer = cv.face.LBPHFaceRecognizer_create()
@@ -60,8 +65,10 @@ text5 = QLabel(window)
 text5.setGeometry(180, 400, 300, 30)
 text5.setPalette(palette)
 
-
+is_successful = False
 def take_photo():
+    global is_successful
+
     cap = cv.VideoCapture(0)
 
     # Give enough time to camera for opening 
@@ -130,6 +137,7 @@ def take_photo():
 
             # Driving permission given
             if(confidence_ratio < 22):
+                is_successful = True
                 # Define font properties for displaying text when if condition true
                 text = people[label][0]
                 text_size = cv.getTextSize(str(text), cv.FONT_HERSHEY_SIMPLEX, font_scale, thickness=2)[0]
@@ -144,16 +152,39 @@ def take_photo():
                 # Output
                 print(f"{text} : {not_confidence}")
 
-                # Save image for better confidence (I'M NOT SURE ON THIS PART) that may be Overfitting
-                current_time = datetime.datetime.now()
-                timestamp = current_time.strftime("%Y%m%d_%H%M%S")
-                output_path = f"dataset/{people[label][0]}/{timestamp}.jpg"
-                cv.imwrite(output_path, pure_img)
+                # Save image for better confidence
+                directory_path = f'dataset/{people[label][0]}'
+                file_count = 0
+                deleted_file = ""
+                deleted_path = f"dataset/{people[label][0]}/{deleted_file}"
+                for root, dirs, files in os.walk(directory_path):
+                    file_count += len(files)
+                    deleted_file = min(files)
+                    deleted_path = f"dataset/{people[label][0]}/{deleted_file}"
+                    if(deleted_file == ".DS_Store"):
+                        os.remove(deleted_path)
+                        files.remove(deleted_file)
+                        deleted_file = min(files)
+                        deleted_path = f"dataset/{people[label][0]}/{deleted_file}"
+                
+                if(file_count < 20):
+                    current_time = datetime.datetime.now()
+                    timestamp = current_time.strftime("%Y%m%d_%H%M%S")
+                    output_path = f"dataset/{people[label][0]}/{timestamp}.jpg"
+                    cv.imwrite(output_path, pure_img)
+                else:
+                    deleted_path = f"dataset/{people[label][0]}/{deleted_file}"
+                    os.remove(deleted_path)
+                    current_time = datetime.datetime.now()
+                    timestamp = current_time.strftime("%Y%m%d_%H%M%S")
+                    output_path = f"dataset/{people[label][0]}/{timestamp}.jpg"
+                    cv.imwrite(output_path, pure_img)
+
 
                 # Save frame in past_drives permanently as succesful
                 current_time = datetime.datetime.now()
                 timestamp = current_time.strftime("%Y%m%d_%H%M%S")
-                output_path = f"past_drives/{timestamp}_YES.jpg"
+                output_path = f"past_drives/successful/{timestamp}_{people[label][0]}.jpg"
                 cv.imwrite(output_path, img)
 
 
@@ -188,6 +219,15 @@ def take_photo():
                 print(f"{people[label][0]}'s Informations: ")
                 for i in range(1, len(people[label])):
                     print(f"{titles[i]} : {people[label][i]}")
+
+                # Execute new recognizer model with new data
+                ipynb_path = "train.ipynb"
+                with open(ipynb_path, 'r', encoding='utf-8') as nb_file:
+                    notebook = read(nb_file, as_version=4)
+
+                exporter = PythonExporter()
+                source, _ = exporter.from_notebook_node(notebook)
+                print("New model trained")
                     
             
             else:
@@ -208,7 +248,7 @@ def take_photo():
                 # Save frame in past_drives permanently as unsuccesful
                 current_time = datetime.datetime.now()
                 timestamp = current_time.strftime("%Y%m%d_%H%M%S")
-                output_path = f"past_drives/{timestamp}_NO.jpg"
+                output_path = f"past_drives/unsuccessful/{timestamp}.jpg"
                 cv.imwrite(output_path, img)
 
                 # Arrange image for App
@@ -245,12 +285,16 @@ def take_photo():
     cv.destroyAllWindows()
     
 
+def timer_callback():
+    global is_successful
+    if not is_successful:
+        take_photo()
 
-# Button for visualize the image
-button_run = QPushButton("Run", window)
-button_run.setGeometry(250, 30, 100, 30)
-button_run.setStyleSheet("background-color: green;")
-button_run.clicked.connect(take_photo)
+# Frame checker     
+timer = QTimer()
+if not is_successful:
+    timer.timeout.connect(timer_callback)
+    timer.start(1000)
 
 # Show all app
 window.show()
