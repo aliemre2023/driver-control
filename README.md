@@ -10,7 +10,5 @@ After car run, driver's informations will show on the screen.
 
 
 Sample Output1 : <br>
-<img width="604" alt="Screen Shot 2023-09-10 at 00 20 42" src="https://github.com/aliemre2023/driver-control/assets/93014021/a622edb2-dde6-4415-b41c-41eb6172e37c">
+<img width="600" alt="Screen Shot 2024-02-27 at 00 20 37" src="https://github.com/aliemre2023/driver-control/assets/93014021/dcb52a87-a6f6-41f4-a4f2-d2305494eb3d">
 <br>
-Sample Output2 : <br>
-<img width="600" alt="Screen Shot 2023-09-10 at 00 29 04" src="https://github.com/aliemre2023/driver-control/assets/93014021/2a00f838-b227-4513-91b7-acd31a5284d6">
