@@ -136,7 +136,7 @@ def take_photo():
             start_x_conf = int((x + (w/2)) - not_confidence_size[1] / 2)
 
             # Driving permission given
-            if(confidence_ratio < 22):
+            if(confidence_ratio < 32):
                 is_successful = True
                 # Define font properties for displaying text when if condition true
                 text = people[label][0]
@@ -167,7 +167,7 @@ def take_photo():
                         deleted_file = min(files)
                         deleted_path = f"dataset/{people[label][0]}/{deleted_file}"
                 
-                if(file_count < 20):
+                if(file_count < 50):
                     current_time = datetime.datetime.now()
                     timestamp = current_time.strftime("%Y%m%d_%H%M%S")
                     output_path = f"dataset/{people[label][0]}/{timestamp}.jpg"
